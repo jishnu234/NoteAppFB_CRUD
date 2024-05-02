@@ -64,7 +64,54 @@ fun NoteAppFirebaseCRUDTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = Typography.copy(
+            titleSmall = MaterialTheme.typography.titleSmall.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            titleMedium = MaterialTheme.typography.titleMedium.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            labelMedium = MaterialTheme.typography.labelMedium.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            labelLarge = MaterialTheme.typography.labelLarge.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            headlineSmall = MaterialTheme.typography.headlineSmall.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            headlineMedium = MaterialTheme.typography.headlineMedium.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            headlineLarge = MaterialTheme.typography.headlineLarge.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            displaySmall = MaterialTheme.typography.displaySmall.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            displayMedium = MaterialTheme.typography.displayMedium.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            displayLarge = MaterialTheme.typography.displayLarge.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            bodySmall = MaterialTheme.typography.bodySmall.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            bodyMedium = MaterialTheme.typography.bodyMedium.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            bodyLarge = MaterialTheme.typography.bodyLarge.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            labelSmall = MaterialTheme.typography.labelSmall.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+            titleLarge = MaterialTheme.typography.titleLarge.copy(
+                fontFamily = noteAppFirebaseCrudFamily
+            ),
+
+        ),
         content = content
     )
 }
