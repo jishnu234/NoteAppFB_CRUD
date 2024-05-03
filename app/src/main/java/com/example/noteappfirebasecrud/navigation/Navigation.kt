@@ -33,7 +33,11 @@ fun NoteAppFirebaseCrudNavigation(
         composable(
             route = Screens.NoteEditScreen.route
         ) {
-            NoteEditScreen()
+            NoteEditScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 
