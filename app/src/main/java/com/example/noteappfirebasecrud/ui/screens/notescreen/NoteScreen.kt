@@ -10,7 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,11 +28,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.noteappfirebasecrud.ui.components.Note
+import com.example.noteappfirebasecrud.ui.screens.notescreen.viewmodel.NoteScreenViewModel
 import com.example.noteappfirebasecrud.ui.theme.noteAppFirebaseCrudFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreen(
+    viewModel: NoteScreenViewModel,
     navigateToNoteEditScreen: () -> Unit
 ) {
     Scaffold(
@@ -37,6 +45,21 @@ fun NoteScreen(
             0.dp,
             0.dp
         ),
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                modifier = Modifier.padding(32.dp),
+                onClick = navigateToNoteEditScreen,
+                shape = CircleShape,
+                containerColor = Color.Black
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = "",
+                    tint = Color.White
+                )
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End,
         containerColor = Color(0xFFF1EEDC)
     ) { paddingValues ->
 

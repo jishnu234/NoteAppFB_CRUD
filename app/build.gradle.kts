@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -74,9 +75,15 @@ dependencies {
 
     //navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    //firebase
+    implementation(libs.firebase.firestore)
 }
 
 // Allow references to generated code

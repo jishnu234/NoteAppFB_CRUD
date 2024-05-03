@@ -40,13 +40,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.noteappfirebasecrud.model.Notes
 import com.example.noteappfirebasecrud.ui.components.NotesTopBar
+import com.example.noteappfirebasecrud.ui.screens.note_edit_screen.viewmodel.NoteEditScreenViewModel
 import com.example.noteappfirebasecrud.ui.theme.noteAppFirebaseCrudFamily
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditScreen(
+    viewModel: NoteEditScreenViewModel,
     navigateBack: () -> Unit
 ) {
     var noteText by remember { mutableStateOf("") }
@@ -150,7 +154,13 @@ fun NoteEditScreen(
                         containerColor = Color.Black
                     ),
                 onClick = {
-                    //Todo: Save and update notes
+                    viewModel.saveNote(
+                        Notes(
+                            title = noteTitle,
+                            notes = noteText,
+                            date = LocalDate.now()
+                        )
+                    )
                 }
             ) {
                 Text(
