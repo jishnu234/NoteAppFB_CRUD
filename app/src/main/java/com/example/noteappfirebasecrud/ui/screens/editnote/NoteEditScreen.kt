@@ -1,5 +1,6 @@
-package com.example.noteappfirebasecrud.ui.screens.note_edit_screen
+package com.example.noteappfirebasecrud.ui.screens.editnote
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -9,24 +10,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -42,23 +47,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.noteappfirebasecrud.model.Notes
 import com.example.noteappfirebasecrud.ui.components.NotesTopBar
-import com.example.noteappfirebasecrud.ui.screens.note_edit_screen.viewmodel.NoteEditScreenViewModel
+import com.example.noteappfirebasecrud.ui.screens.editnote.viewmodel.NoteEditScreenViewModel
 import com.example.noteappfirebasecrud.ui.theme.noteAppFirebaseCrudFamily
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+
+private const val TAG = "NoteEditScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditScreen(
+    args: String?,
     viewModel: NoteEditScreenViewModel,
     navigateBack: () -> Unit
 ) {
-    var noteText by remember { mutableStateOf("") }
-    var noteTitle by remember { mutableStateOf("") }
+    val uiStates = viewModel.uiStates.collectAsState().value
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
 
     val scrollState = rememberScrollState()
+
+
+    LaunchedEffect(key1 = Unit, block = {
+        Log.d(TAG, "NoteEditScreen: incoming args: ${args.isNullOrEmpty()}")
+        if (!args.isNullOrEmpty()) {
+            Log.d(TAG, "NoteEditScreen: args ---  $args")
+            viewModel.setArgs(args)
+        } else {
+            Log.d(TAG, "NoteEditScreen: args --- args empty")
+        }
+    })
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -73,10 +90,8 @@ fun NoteEditScreen(
             TopAppBar(
                 title = {
                     NotesTopBar(
-                        value = noteTitle,
-                        onValueChange = {
-                            noteTitle = it
-                        },
+                        value = uiStates.titleText.orEmpty(),
+                        onValueChange = viewModel::updateTitleText,
                         onBackPressed = navigateBack
                     )
                 },
@@ -85,11 +100,25 @@ fun NoteEditScreen(
                         containerColor = Color(0xFFF1EEDC)
                     )
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .imePadding(),
+                hostState = viewModel.snackBarHostState,
+                snackbar = { snackBarData ->
+                    Snackbar(
+                        snackbarData = snackBarData,
+                        containerColor = Color(0xFFB3C8CF),
+                        contentColor = Color.Black
+                    )
+                }
+            )
         }
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
@@ -110,15 +139,20 @@ fun NoteEditScreen(
                         .focusRequester(focusRequester)
                         .onFocusChanged {
                             if (it.isFocused)
-                                noteText =
-                                    if (noteText.equals("Enter your notes..", ignoreCase = true))
-                                        "" else noteText
+                                viewModel.updateNoteText(
+                                    if (uiStates.noteText.equals(
+                                            "Enter your notes..",
+                                            ignoreCase = true
+                                        )
+                                    )
+                                        "" else uiStates.noteText.orEmpty()
+                                )
                             else
-                                if (noteText.isEmpty())
-                                    noteText = "Enter your notes.."
+                                if (uiStates.noteText.isNullOrEmpty())
+                                    viewModel.updateNoteText("Enter your notes..")
 
                         },
-                    value = noteText,
+                    value = uiStates.noteText.orEmpty(),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done
                     ),
@@ -126,13 +160,13 @@ fun NoteEditScreen(
                         coroutineScope.launch {
                             scrollState.animateScrollTo(scrollState.maxValue)
                         }
-                        noteText = it
+                        viewModel.updateNoteText(it)
                     },
                     readOnly = false,
                     textStyle = TextStyle(
                         fontFamily = noteAppFirebaseCrudFamily,
                         textAlign = TextAlign.Start,
-                        color = if (noteText.equals("Enter your notes..", false))
+                        color = if (uiStates.noteText.equals("Enter your notes..", false))
                             Color.Black.copy(0.5f)
                         else
                             Color.Black,
@@ -154,17 +188,19 @@ fun NoteEditScreen(
                         containerColor = Color.Black
                     ),
                 onClick = {
-                    viewModel.saveNote(
+                    viewModel.checkNotes(
                         Notes(
-                            title = noteTitle,
-                            notes = noteText,
-                            date = LocalDate.now()
-                        )
+                            note = uiStates.noteText.orEmpty(),
+                            title = uiStates.titleText.orEmpty()
+                        ),
+                        onSuccess = {
+                            navigateBack()
+                        }
                     )
                 }
             ) {
                 Text(
-                    text = "Save",
+                    text = if (uiStates.note == null) "Save" else "Update",
                     color = Color.White,
                     style = TextStyle(
                         fontFamily = noteAppFirebaseCrudFamily,
@@ -175,6 +211,11 @@ fun NoteEditScreen(
                     textAlign = TextAlign.Start
                 )
             }
+
+
+            CircularProgressIndicator(
+                modifier = Modifier.size(64.dp)
+            )
         }
 
     }

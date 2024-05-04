@@ -1,9 +1,13 @@
 package com.example.noteappfirebasecrud.model
 
-import java.time.LocalDate
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class Notes(
-    val title: String,
-    val notes: String,
-    val date: LocalDate,
+    @SerialName("title") val title: String,
+    @SerialName("note") val note: String,
+    @SerialName("date") val date: String? = null,
+    @SerialName("id") val documentId: String? = null,
 )

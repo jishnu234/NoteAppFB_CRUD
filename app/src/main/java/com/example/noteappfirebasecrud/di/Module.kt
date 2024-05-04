@@ -3,10 +3,11 @@ package com.example.noteappfirebasecrud.di
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.example.noteappfirebasecrud.network.NetworkService
-import com.example.noteappfirebasecrud.network.impl.NetworkServiceImpl
 import com.example.noteappfirebasecrud.storage.Preference
 import com.example.noteappfirebasecrud.storage.PreferenceImpl
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,7 @@ class NoteAppModule{
 
     @Provides
     @Singleton
-    fun provideNetworkService(): NetworkService = NetworkServiceImpl()
+    fun provideFirebaseCollection(): CollectionReference = Firebase.firestore.collection("notes_collection")
 
     @Provides
     @Singleton

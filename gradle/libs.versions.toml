@@ -3,11 +3,13 @@ activityCompose = "1.8.2"
 androidxJunit = "1.1.5"
 coreKtx = "1.9.0"
 espressoCore = "3.5.1"
+firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.0.0"
 googleServices = "4.4.1"
 hiltAndroid = "2.51"
 hiltNavigationCompose = "1.2.0"
 junit = "4.13.2"
+kotlinxSerializationJson = "1.5.0"
 lifecycleRuntimeKtx = "2.7.0"
 androidGradlePlugin = "8.1.0"
 kotlinAndroid = "1.8.10"
@@ -22,11 +24,13 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+firebase-database = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin"}
