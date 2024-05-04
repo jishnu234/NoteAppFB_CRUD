@@ -5,16 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.rememberNavController
 import com.example.noteappfirebasecrud.navigation.NoteAppFirebaseCrudNavigation
+import com.example.noteappfirebasecrud.storage.Preference
 import com.example.noteappfirebasecrud.ui.theme.NoteAppFirebaseCRUDTheme
+import com.example.noteappfirebasecrud.util.LocalNoteNavController
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var preference: Preference
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.auto(
@@ -31,9 +37,11 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
 
-                /* CompositionLocalProvider(LocalNoteNavController provides navController) { */
-                NoteAppFirebaseCrudNavigation(navController)
-//                }
+                CompositionLocalProvider(LocalNoteNavController provides navController) {
+                    NoteAppFirebaseCrudNavigation(
+                        navController = navController, preference = preference
+                    )
+                }
 
             }
         }

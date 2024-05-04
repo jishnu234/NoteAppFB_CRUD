@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+    kotlin("plugin.serialization") version "1.8.20"
 }
 
 android {
@@ -64,6 +66,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,9 +77,18 @@ dependencies {
 
     //navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    //firebase
+    implementation(libs.firebase.firestore)
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+
+    implementation(libs.kotlinx.serialization.json)
 }
 
 // Allow references to generated code
